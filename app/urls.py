@@ -1,22 +1,18 @@
-"""
-URL configuration for app project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
 from django.urls import path
+from .views import TaskListAPIView, UserTaskListAPIView, TaskDetailAPIView, TaskCreateAPIView, TaskUpdateAPIView,TaskDeleteAPIView, UserRegisterAPIView
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('register/', UserRegisterAPIView.as_view(), name='register'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('tasks/', TaskListAPIView.as_view(), name='all-tasks'),
+    path('users/<int:user_id>/tasks/', UserTaskListAPIView.as_view(), name='user-tasks'),
+    path('tasks/<int:id>/', TaskDetailAPIView.as_view(), name='task-detail'),
+    path('tasks/create/', TaskCreateAPIView.as_view(), name='create-task'),
+    path('tasks/<int:id>/update/', TaskUpdateAPIView.as_view(), name='update-task'),
+    path('tasks/<int:id>/delete/', TaskDeleteAPIView.as_view(), name='delete-task'),
+    
+    
 ]
+
