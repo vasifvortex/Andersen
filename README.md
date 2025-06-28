@@ -42,7 +42,7 @@ It includes custom user authentication using JWT and Swagger documentation.
 ```
 5. Run tests
 ```
-   docker compose exec web python manage.py test
+   docker compose exec web python manage.py test tasks
 ```
 
 ## API Documentation
