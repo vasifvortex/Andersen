@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from .models import Task
+from tasks.models import Task
 
 User = get_user_model()
 
@@ -15,7 +15,7 @@ class TaskAPITest(APITestCase):
         response = self.client.post(url, {'username': 'testuser', 'password': 'testpassword'})
         self.assertEqual(response.status_code, 200)
         self.token = response.data['access']
-
+     
         # Set token for future requests
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
@@ -24,15 +24,21 @@ class TaskAPITest(APITestCase):
             title='Test Task',
             description='Test description',
             user_id=self.user
+            
+              
         )
 
     def test_create_task(self):
         data = {'title': 'New Task', 'description': 'Test description','user_id': self.user.id}
         response = self.client.post(reverse('create-task'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    
+    def test_list_tasks(self):
+        response = self.client.get(reverse("task-list"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_list_all_tasks(self):
-        response = self.client.get(reverse('all-tasks'))
+    def test_filter_tasks_by_status(self):
+        response = self.client.get(reverse("task-list") + "?status=new")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_tasks(self):
@@ -54,10 +60,6 @@ class TaskAPITest(APITestCase):
 
     def test_complete_task(self):
         response = self.client.patch(reverse('task-complete', args=[self.task.id]))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_filter_tasks(self):
-        response = self.client.get(reverse('task-list') + '?status=new')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_registration(self):
