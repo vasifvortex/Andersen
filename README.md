@@ -1,45 +1,49 @@
 # Task Management API
 
-This is a Django REST Framework project for managing tasks with user authentication and JWT.
+This is a RESTful API for managing tasks, built with Django REST Framework and PostgreSQL.
+It includes custom user authentication using JWT and Swagger documentation.
 
 ---
-
+##Features
+- JWT Authentication (Login/Token)
+- Custom User model with registration endpoint
+- Task CRUD operations (Create, Read, Update, Delete)
+- Task completion endpoint
+- Task filtering by status and user
+- Swagger UI documentation
+- Docker & PostgreSQL support
+  
 ## Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd <project-folder>
+1. Clone the repository
 ```
-
-2. Create and activate a virtual environment:
-```bash
-python -m venv env
-source env/bin/activate  # Linux/Mac
-env\Scripts\activate   # Windows
+   git clone https://github.com/your-repo/task-api.git
+   cd task-api
 ```
+2. Configure environment variables
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
+   Create a `.env` file in the root directory and add:
 ```
-
-4. Configure PostgreSQL database:
-- Install PostgreSQL
-- Create a database and a user with privileges
-- Update `settings.py` DATABASES section accordingly
-
-5. Apply migrations:
-```bash
-python manage.py migrate
+   DEBUG=True
+   SECRET_KEY=your-secret-key
+   DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+   POSTGRES_DB=django_db
+   POSTGRES_USER=django_user
+   POSTGRES_PASSWORD=django_pass
+   DB_HOST=db
+   DB_PORT=5432
 ```
-
-6. Run the server:
-```bash
-python manage.py runserver
+3. Build and run with Docker
 ```
-
----
+   docker compose up --build
+```
+4. Apply migrations
+```
+   docker compose exec web python manage.py migrate
+```
+5. Run tests
+```
+   docker compose exec web python manage.py test
+```
 
 ## API Documentation
 
@@ -118,8 +122,13 @@ DELETE /api/tasks/<task_id>/delete/
 ```
 
 - Filter Task:
+  <task_status> should be one of the following:
+  -new
+  -in_progress
+  -completed
 ```
-GET /api/tasks/filter
+GET /api/tasks/?status=<task_status>
+
 ```
 
 - Mark Task as Completed:
@@ -128,25 +137,15 @@ PATCH /api/tasks/<task_id>/complete/
 ```
 
 ---
-
-## Running Tests
-
-```bash
-python manage.py test
+## Swagger Documentation
+Once the server is running, access Swagger UI at:
 ```
-
----
-
-## Notes
-
-- Make sure to include the JWT Bearer token in the `Authorization` header for authenticated endpoints:
+http://localhost:8000/swagger/
 ```
-Authorization: Bearer <access_token>
+You can authorize using the Bearer Token in the top-right by entering:
 ```
-
-- Use PostgreSQL as the database for better reliability and performance.
-
----
+Bearer your-jwt-token
+```
 
 ## License
 
