@@ -122,10 +122,10 @@ DELETE /api/tasks/<task_id>/delete/
 ```
 
 - Filter Task:
-  <task_status> should be one of the following:
-  -new
-  -in_progress
-  -completed
+    `<task_status>` should be one of the following:  
+  - `new`  
+  - `in_progress`  
+  - `completed`  
 ```
 GET /api/tasks/?status=<task_status>
 
